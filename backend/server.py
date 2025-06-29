@@ -331,12 +331,17 @@ async def send_message(
 async def get_messages(user_id: str = Depends(verify_token)):
     """Get user messages"""
     
-    messages = await db.messages.find({
+    messages_cursor = db.messages.find({
         "$or": [
             {"sender_id": user_id},
             {"receiver_id": user_id}
         ]
-    }).sort("created_at", -1).to_list(length=100)
+    }).sort("created_at", -1)
+    
+    messages = await messages_cursor.to_list(length=100)
+    
+    # Convert ObjectId to string
+    messages = convert_objectid_to_str(messages)
     
     # Group messages by conversation (item_id + other_user)
     conversations = {}
