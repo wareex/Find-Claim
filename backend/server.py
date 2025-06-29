@@ -370,7 +370,12 @@ async def get_profile(user_id: str = Depends(verify_token)):
         raise HTTPException(status_code=404, detail="User not found")
     
     # Get user's lost items
-    lost_items = await db.lost_items.find({"user_id": user_id}).to_list(length=100)
+    lost_items_cursor = db.lost_items.find({"user_id": user_id})
+    lost_items = await lost_items_cursor.to_list(length=100)
+    
+    # Convert ObjectId to string
+    user = convert_objectid_to_str(user)
+    lost_items = convert_objectid_to_str(lost_items)
     
     return {
         "user": user,
