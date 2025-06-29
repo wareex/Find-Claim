@@ -13,7 +13,11 @@ const Login = () => {
       // In a real app, this would use Google OAuth
       // For demo purposes, we'll simulate a successful login
       const mockGoogleToken = 'mock-google-token-' + Math.random();
-      await login(mockGoogleToken);
+      const result = await login(mockGoogleToken);
+      
+      if (!result.success) {
+        console.error('Login failed:', result.error);
+      }
     } catch (error) {
       console.error('Login failed:', error);
     } finally {
