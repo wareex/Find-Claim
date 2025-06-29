@@ -296,7 +296,14 @@ async def get_lost_item(item_id: str):
     
     # Get user info
     user = await db.users.find_one({"id": item["user_id"]})
-    item["user"] = {"name": user["name"], "avatar_url": user.get("avatar_url")} if user else None
+    if user:
+        user = convert_objectid_to_str(user)
+        item["user"] = {"name": user["name"], "avatar_url": user.get("avatar_url")}
+    else:
+        item["user"] = None
+    
+    # Convert ObjectId to string
+    item = convert_objectid_to_str(item)
     
     return item
 
