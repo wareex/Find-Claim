@@ -104,6 +104,14 @@ def create_jwt_token(user_id: str) -> str:
 
 async def verify_google_token(token: str) -> dict:
     """Verify Google OAuth token and return user info"""
+    # Demo mode - accept any token that starts with 'mock-'
+    if token.startswith('mock-'):
+        return {
+            "email": "demo@example.com",
+            "name": "Demo User",
+            "picture": "https://via.placeholder.com/150"
+        }
+    
     try:
         async with httpx.AsyncClient() as client:
             response = await client.get(
