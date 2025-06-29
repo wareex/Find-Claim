@@ -85,6 +85,17 @@ CATEGORIES = [
 ]
 
 # Helper Functions
+def convert_objectid_to_str(obj):
+    """Convert MongoDB ObjectId to string recursively"""
+    if isinstance(obj, ObjectId):
+        return str(obj)
+    elif isinstance(obj, dict):
+        return {key: convert_objectid_to_str(value) for key, value in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_objectid_to_str(item) for item in obj]
+    else:
+        return obj
+
 async def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
     try:
         token = credentials.credentials
