@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException, Depends, File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime, timedelta
@@ -12,6 +13,8 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import base64
 from PIL import Image
 import io
+import json
+from bson import ObjectId
 
 app = FastAPI(title="Lost & Found API", version="1.0.0")
 
