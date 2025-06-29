@@ -273,8 +273,12 @@ async def get_lost_items(
     
     skip = (page - 1) * limit
     
-    items = await db.lost_items.find(query).skip(skip).limit(limit).to_list(length=limit)
+    items_cursor = db.lost_items.find(query).skip(skip).limit(limit)
+    items = await items_cursor.to_list(length=limit)
     total = await db.lost_items.count_documents(query)
+    
+    # Convert ObjectId to string
+    items = convert_objectid_to_str(items)
     
     return {
         "items": items,
